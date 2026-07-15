@@ -1,0 +1,9 @@
+name: server-application-a
+
+services:
+  api-services:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 5

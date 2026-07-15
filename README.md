@@ -53,7 +53,7 @@ Build
 
 dist/
 
----------------------
+---
 
 Stage 2
 
@@ -84,18 +84,54 @@ Image Size: 80 MB
 - --only=production => Install only production dependencies.
 
 - --from=builder => Copy something from the stage named (builder) instead of your laptop.
-- /app/node_modules => Take this folder from Builder Image 
-- ./node_modules =>  Put it into Current directory /app/node_modules inside the runner image.
+- /app/node_modules => Take this folder from Builder Image
+- ./node_modules => Put it into Current directory /app/node_modules inside the runner image.
 - Builder /app node_modules Copy Runner /app node_modules
 
 - ENV => Create an environment variable.
 
 - EXPOSE 8080 => My application listens on port 8080.
-
-    - "My application listens on port 8080."
-    - It does not publish the port to your laptop.
-    - It is mainly documentation for Docker and for people reading the image.
-    - To actually access it from outside, you still need:
-    - docker run -p 8080:8080 image-name
+  - "My application listens on port 8080."
+  - It does not publish the port to your laptop.
+  - It is mainly documentation for Docker and for people reading the image.
+  - To actually access it from outside, you still need:
+  - docker run -p 8080:8080 image-name
 
 - CMD => When someone runs docker run image-name Docker automatically executes npm start
+
+- COPY . . ( <source> <destination>) => Copy files from my laptop into the Docker image.
+
+# Project Commands
+
+- docker build -t api . => crete docker image using current folder
+
+- docker run -it --rm -p 8080:8080 api => run docker image
+  - -i → Interactive mode
+  - -t → Allocate a terminal (TTY)
+  - --rm → Remove the container after it stops
+  - api → Image name
+
+- docker compose -f file-name up => run only one file
+- docker ps => show running containers
+
+## create docker-compose.api-gateway.yml file
+
+# : What does this file do?
+
+• Creates a Traefik container.
+• Traefik acts as an API Gateway.
+• Receives all incoming requests.
+• Routes requests to the correct Docker container.
+• Handles HTTP (80) and HTTPS (443).
+• Automatically discovers Docker containers.
+• Manages SSL certificates using Let's Encrypt.
+
+- services => Which containers do you want Docker to create
+- image => Which software should this container run?
+- volumes => Share storage between host and container.
+
+## create docker-compose.server.yml file
+
+- build => Don't download an image from Docker Hub. Build the image yourself. (Read my Dockerfile Create Image)
+- context: . => Current folder Use everything inside this folder.
+- deploy: Run 5 copies of this service.
