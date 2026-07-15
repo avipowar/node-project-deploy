@@ -7,3 +7,28 @@ services:
       dockerfile: Dockerfile
     deploy:
       replicas: 5
+    networks:
+      - internal
+
+  caddy:
+    image: caddy:latest
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    labels:
+      - "traefik.enable=true" # Hello Traefik Please use me.
+      - "traefik.http.routers.my-router.rule=Host(`avinash.online`)" # If user opens avinash.online Send request to me.
+      - "traefik.http.services.my-router.loadbalancer.server.port=80" # Inside this container, the web server is listening on port 80
+      - "traefik.http.routers.my-router.entrypoints=websecure" # Only accept HTTPS.
+      - "traefik.docker.network=project-a-network" # Caddy is connected to two networks. Which network should I use to reach Caddy
+      - "traefik.http.routers.my-router.tls=true" #  hey traefik accept the https req
+      - "traefik.http.routers.my-router.tls.certresolver=cert-resolver" #Get/manage the SSL certificate using the cert-resolver.
+
+    networks:
+      - project-a-network
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+  project-a-network:
+    external: true

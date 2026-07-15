@@ -135,3 +135,22 @@ Image Size: 80 MB
 - build => Don't download an image from Docker Hub. Build the image yourself. (Read my Dockerfile Create Image)
 - context: . => Current folder Use everything inside this folder.
 - deploy: Run 5 copies of this service.
+
+- ./Caddyfile:/etc/caddy/Caddyfile:ro
+
+  • Copy the local Caddyfile into the container.
+  • Store it at /etc/caddy/Caddyfile.
+  • ro = Read Only.
+
+# labels
+
+Problem:
+• Traefik can see running containers.
+• But it doesn't know which request should go to which container.
+
+Solution:
+• Add labels to containers.
+• Labels tell Traefik how to route requests.
+
+Example:
+User → Traefik → Reads Labels → Correct Container
