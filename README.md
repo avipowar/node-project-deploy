@@ -181,3 +181,10 @@ header_up X-Forwarded-Proto
 • Tell the backend whether the original request was HTTP or HTTPS.
 
 ## go to aws and do ssh
+
+- sudo apt-get update => Download the latest package list from Ubuntu repositories.
+- install docker
+- clone project from docker
+- point domain to machine ip
+- sudo docker compose -f docker-compose.api-gateway.yml up -d => run traefik file
+- sudo docker compose -f docker-compose.server.yml up -d => run caddey server
