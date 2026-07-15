@@ -154,3 +154,30 @@ Solution:
 
 Example:
 User → Traefik → Reads Labels → Correct Container
+
+## create CaddyFile
+
+Traefik => Port 80 =>
+
+:80
+• Caddy listens on Port 80.
+
+# Everything inside handle tells Caddy what to do.
+
+reverse_proxy api-service:8000
+• Forward requests to the Node.js service.
+• api-service is the Docker service name.
+
+header_up Host
+• Pass the original Host header.
+
+header_up X-Real-IP
+• Pass the real client IP.
+
+header_up X-Forwarded-For
+• Pass the original client IP information.
+
+header_up X-Forwarded-Proto
+• Tell the backend whether the original request was HTTP or HTTPS.
+
+## go to aws and do ssh

@@ -5,20 +5,21 @@ services:
     image: traefik:latest
 
     command:
-      - "--api=true"
-      - "--api.dashboard=true"
-      - "--log.level=DEBUG"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.traefik.address=:8000"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.cert-resolver.acme.httpchallenge=true"
-      - "--certificatesresolvers.cert-resolver.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.cert-resolver.acme.email=powaravinash06@gmail.com"
-      - "--certificatesresolvers.cert-resolver.acme.storage=/letsencrypt/acme.json"
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--api=true" #  Enable Traefik API.
+      - "--api.dashboard=true" # Enable Traefik Dashboard.
+      - "--log.level=DEBUG" #  Print detailed logs for debugging.
+      - "--providers.docker=true" # Use Docker as the provider.( Source of information.)
+      - "--providers.docker.exposedbydefault=false" # Keep every container private by default.
+      # EntryPoint =>  A port where Traefik listens for requests.
+      - "--entrypoints.traefik.address=:8000" # Create another entry point on Port 8000 for the Traefik dashboard/API.
+      - "--entrypoints.web.address=:80" # Traefik, listen for HTTP requests on Port 80.
+      - "--entrypoints.websecure.address=:443" # Traefik, listen for HTTPS requests on Port 443.
+      - "--certificatesresolvers.cert-resolver.acme.httpchallenge=true" # Use HTTP challenge to verify domain ownership.
+      - "--certificatesresolvers.cert-resolver.acme.httpchallenge.entrypoint=web" # Perform verification on Port 80 (web entry point).
+      - "--certificatesresolvers.cert-resolver.acme.email=powaravinash06@gmail.com" #  Register with Let's Encrypt. Receive expiry notifications.
+      - "--certificatesresolvers.cert-resolver.acme.storage=/letsencrypt/acme.json" # Save certificates in acme.json.ertificates survive container restarts.
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure" # "When a request comes to Port 80, redirect it to the websecure entry point (Port 443)."
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https" # Use the HTTPS protocol after redirection."
 
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
